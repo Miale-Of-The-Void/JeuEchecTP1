@@ -65,7 +65,7 @@ bool loadMedia()
 	bool success = true;
 
 	//Load splash image
-	gHelloWorld = SDL_LoadBMP("Images/hello_world.bmp");
+	gHelloWorld = IMG_Load("Images/hello_world.bmp");
 	if (gHelloWorld == NULL)
 	{
 		printf("Unable to load image %s! SDL Error: %s\n", "02_getting_an_image_on_the_screen/hello_world.bmp", SDL_GetError());
@@ -105,8 +105,9 @@ int main(int argc, char* args[])
 		}
 		else
 		{
+			SDL_Rect rect = { 10, 10, 250, 250 };
 			//Apply the image
-			SDL_BlitSurface(gHelloWorld, NULL, gScreenSurface, NULL);
+			SDL_BlitSurface(gHelloWorld, NULL, gScreenSurface, &rect);
 
 			//Update the surface
 			SDL_UpdateWindowSurface(gWindow);
