@@ -27,7 +27,8 @@ SDL_Window* gWindow = NULL;
 SDL_Surface* gScreenSurface = NULL;
 
 //The image we will load and show on the screen
-SDL_Surface* gHelloWorld = NULL;
+SDL_Surface* WhiteCase = NULL;
+SDL_Surface* BlackCase = NULL;
 
 bool init()
 {
@@ -65,8 +66,16 @@ bool loadMedia()
 	bool success = true;
 
 	//Load splash image
-	gHelloWorld = IMG_Load("Images/hello_world.bmp");
-	if (gHelloWorld == NULL)
+	WhiteCase = IMG_Load("Images/WhiteCase.png");
+	BlackCase = IMG_Load("Images/BlackCase.png");
+
+	if (WhiteCase == NULL)
+	{
+		printf("Unable to load image %s! SDL Error: %s\n", "02_getting_an_image_on_the_screen/hello_world.bmp", SDL_GetError());
+		success = false;
+	}
+
+	if (BlackCase == NULL)
 	{
 		printf("Unable to load image %s! SDL Error: %s\n", "02_getting_an_image_on_the_screen/hello_world.bmp", SDL_GetError());
 		success = false;
@@ -78,8 +87,10 @@ bool loadMedia()
 void close()
 {
 	//Deallocate surface
-	SDL_FreeSurface(gHelloWorld);
-	gHelloWorld = NULL;
+	SDL_FreeSurface(WhiteCase);
+	WhiteCase = NULL;
+	SDL_FreeSurface(BlackCase);
+	WhiteCase = NULL;
 
 	//Destroy window
 	SDL_DestroyWindow(gWindow);
@@ -105,10 +116,27 @@ int main(int argc, char* args[])
 		}
 		else
 		{
-			SDL_Rect rect = { 10, 10, 250, 250 };
-			//Apply the image
-			SDL_BlitSurface(gHelloWorld, NULL, gScreenSurface, &rect);
+			for (int i = 0; i < 8; i++)
+			{
+				for (int j = 0; j < 8; j++)
+				{
 
+					if ((i+j)% 2 == 0)
+					{
+						SDL_Rect rect = { i * 125, j * 125, 125, 125 };
+						//Apply the image
+						SDL_BlitSurface(WhiteCase, NULL, gScreenSurface, &rect);
+					}
+					else
+					{
+						SDL_Rect rect = { i * 125, j * 125, 125, 125 };
+						//Apply the image
+						SDL_BlitSurface(BlackCase, NULL, gScreenSurface, &rect);
+					}
+					//Update the surface
+					SDL_UpdateWindowSurface(gWindow);
+				}
+			}
 			//Update the surface
 			SDL_UpdateWindowSurface(gWindow);
 
