@@ -28,7 +28,19 @@ SDL_Surface* gScreenSurface = NULL;
 
 //The image we will load and show on the screen
 SDL_Surface* WhiteCase = NULL;
+SDL_Surface* WhitePawn = NULL;
+SDL_Surface* WhiteKing = NULL;
+SDL_Surface* WhiteQueen = NULL;
+SDL_Surface* WhiteRook = NULL;
+SDL_Surface* WhiteKnight = NULL;
+SDL_Surface* WhiteBishop = NULL;
 SDL_Surface* BlackCase = NULL;
+SDL_Surface* BlackPawn = NULL;
+SDL_Surface* BlackKing = NULL;
+SDL_Surface* BlackQueen = NULL;
+SDL_Surface* BlackKnight = NULL;
+SDL_Surface* BlackRook = NULL;
+SDL_Surface* BlackBishop = NULL;
 
 bool init()
 {
@@ -67,7 +79,21 @@ bool loadMedia()
 
 	//Load splash image
 	WhiteCase = IMG_Load("Images/WhiteCase.png");
+	WhitePawn = IMG_Load("Images/WhitePawn.png");
+	WhiteKing = IMG_Load("Images/WhiteKing.png");
+	WhiteQueen = IMG_Load("Images/WhiteQueen.png");
+	WhiteRook = IMG_Load("Images/WhiteRook.png");
+	WhiteKnight = IMG_Load("Images/WhiteKnight.png");
+	WhiteBishop = IMG_Load("Images/WhiteBishop.png");
+
+
 	BlackCase = IMG_Load("Images/BlackCase.png");
+	BlackPawn = IMG_Load("Images/BlackPawn.png");
+	BlackKing = IMG_Load("Images/BlackKing.png");
+	BlackQueen = IMG_Load("Images/BlackQueen.png");
+	BlackRook = IMG_Load("Images/BlackRook.png");
+	BlackKnight = IMG_Load("Images/BlackKnight.png");
+	BlackBishop = IMG_Load("Images/BlackBishop.png");
 
 	if (WhiteCase == NULL)
 	{
@@ -89,8 +115,33 @@ void close()
 	//Deallocate surface
 	SDL_FreeSurface(WhiteCase);
 	WhiteCase = NULL;
+	SDL_FreeSurface(WhitePawn);
+	WhitePawn = NULL;
+	SDL_FreeSurface(WhiteKing);
+	WhiteKing = NULL;
+	SDL_FreeSurface(WhiteQueen);
+	WhiteQueen = NULL;
+	SDL_FreeSurface(WhiteRook);
+	WhiteRook = NULL;
+	SDL_FreeSurface(WhiteKnight);
+	WhiteKnight = NULL;
+	SDL_FreeSurface(WhiteBishop);
+	WhiteBishop = NULL;
+
 	SDL_FreeSurface(BlackCase);
 	WhiteCase = NULL;
+	SDL_FreeSurface(BlackPawn);
+	BlackPawn = NULL;
+	SDL_FreeSurface(BlackKing);
+	BlackKing = NULL;
+	SDL_FreeSurface(BlackQueen);
+	BlackQueen = NULL;
+	SDL_FreeSurface(BlackRook);
+	BlackRook = NULL;
+	SDL_FreeSurface(BlackKnight);
+	BlackKnight = NULL;
+	SDL_FreeSurface(BlackBishop);
+	BlackBishop = NULL;
 
 	//Destroy window
 	SDL_DestroyWindow(gWindow);
