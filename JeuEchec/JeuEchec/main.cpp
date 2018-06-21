@@ -5,6 +5,10 @@ and may not be redistributed without written permission.*/
 #include <SDL.h>
 #include <stdio.h>
 #include <SDL_image.h>
+#include "Case.h"
+#include "Piece.h"
+#include "WhitePawn.h"
+#include <vector>
 
 
 //Screen dimension constants
@@ -41,6 +45,10 @@ SDL_Surface* BlackQueen = NULL;
 SDL_Surface* BlackKnight = NULL;
 SDL_Surface* BlackRook = NULL;
 SDL_Surface* BlackBishop = NULL;
+
+//Vecteurs pour creer le board
+std::vector<std::vector<Case>> Board = std::vector<std::vector<Case>>();
+std::vector<std::vector<Piece>> pieceBoard = std::vector<std::vector<Piece>>();
 
 bool init()
 {
@@ -167,32 +175,32 @@ int main(int argc, char* args[])
 		}
 		else
 		{
-			for (int i = 0; i < 8; i++)
-			{
-				for (int j = 0; j < 8; j++)
+				for (int i = 0; i < 8; i++)
 				{
+					Board.push_back(std::vector<Case>());
+					for (int j = 0; j < 8; j++)
+					{
+						Board[i].push_back(Case(i, j));
+						
 
-					if ((i+j)% 2 == 0)
-					{
-						SDL_Rect rect = { i * 125, j * 125, 125, 125 };
-						//Apply the image
-						SDL_BlitSurface(WhiteCase, NULL, gScreenSurface, &rect);
 					}
-					else
-					{
-						SDL_Rect rect = { i * 125, j * 125, 125, 125 };
-						//Apply the image
-						SDL_BlitSurface(BlackCase, NULL, gScreenSurface, &rect);
-					}
-					//Update the surface
-					SDL_UpdateWindowSurface(gWindow);
 				}
-			}
+			while (true)
+			{
 			//Update the surface
 			SDL_UpdateWindowSurface(gWindow);
-
-			//Wait two seconds
-			SDL_Delay(2000);
+				for (int i = 0; i < 8; i++)
+				{
+					for (int j = 0; j < 8; j++)
+					{
+						Board[i][j].Case::Render(gScreenSurface);
+						if (i == 0 || i == 1 || i == 6 || i == 7)
+						{
+							pieceBoard[i][j].Render(gScreenSurface);
+						}
+					}
+				}
+			}
 		}
 	}
 
