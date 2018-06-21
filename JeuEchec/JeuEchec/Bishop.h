@@ -1,13 +1,12 @@
 #pragma once
 #include "Piece.h"
-class WhitePawn :
+class Bishop :
 	public Piece
 {
 public:
-	WhitePawn(int i, int j, bool black);
-	~WhitePawn();
+	Bishop(int i, int j, bool black);
+	~Bishop();
 
 	void Render(SDL_Surface* gScreenSurface);
-	void Move();
 };
 

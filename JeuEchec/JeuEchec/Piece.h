@@ -6,12 +6,13 @@
 class Piece
 {
 public:
-	Piece(int i, int j);
+	Piece(int i,int j);
 	~Piece();
 
 	SDL_Rect rect;
 	SDL_Surface* pieceTexture;
 
 	virtual void Render(SDL_Surface* gScreenSurface);
+	virtual void Move();
 };
 

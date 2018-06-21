@@ -8,7 +8,13 @@ and may not be redistributed without written permission.*/
 #include "Case.h"
 #include "Piece.h"
 #include "WhitePawn.h"
+#include "Rook.h"
+#include "Bishop.h"
+#include "Knight.h"
+#include "Queen.h"
+#include "King.h"
 #include <vector>
+#include <iostream>
 
 
 //Screen dimension constants
@@ -31,7 +37,7 @@ SDL_Window* gWindow = NULL;
 SDL_Surface* gScreenSurface = NULL;
 
 //The image we will load and show on the screen
-SDL_Surface* WhiteCase = NULL;
+/*SDL_Surface* WhiteCase = NULL;
 SDL_Surface* WhitePawn = NULL;
 SDL_Surface* WhiteKing = NULL;
 SDL_Surface* WhiteQueen = NULL;
@@ -44,11 +50,11 @@ SDL_Surface* BlackKing = NULL;
 SDL_Surface* BlackQueen = NULL;
 SDL_Surface* BlackKnight = NULL;
 SDL_Surface* BlackRook = NULL;
-SDL_Surface* BlackBishop = NULL;
+SDL_Surface* BlackBishop = NULL;*/
 
 //Vecteurs pour creer le board
 std::vector<std::vector<Case>> Board = std::vector<std::vector<Case>>();
-std::vector<std::vector<Piece>> pieceBoard = std::vector<std::vector<Piece>>();
+std::vector<std::vector<Piece*>> pieceBoard = std::vector<std::vector<Piece*>>();
 
 bool init()
 {
@@ -86,7 +92,7 @@ bool loadMedia()
 	bool success = true;
 
 	//Load splash image
-	WhiteCase = IMG_Load("Images/WhiteCase.png");
+	/*WhiteCase = IMG_Load("Images/WhiteCase.png");
 	WhitePawn = IMG_Load("Images/WhitePawn.png");
 	WhiteKing = IMG_Load("Images/WhiteKing.png");
 	WhiteQueen = IMG_Load("Images/WhiteQueen.png");
@@ -101,9 +107,9 @@ bool loadMedia()
 	BlackQueen = IMG_Load("Images/BlackQueen.png");
 	BlackRook = IMG_Load("Images/BlackRook.png");
 	BlackKnight = IMG_Load("Images/BlackKnight.png");
-	BlackBishop = IMG_Load("Images/BlackBishop.png");
+	BlackBishop = IMG_Load("Images/BlackBishop.png");*/
 
-	if (WhiteCase == NULL)
+	/*if (WhiteCase == NULL)
 	{
 		printf("Unable to load image %s! SDL Error: %s\n", "02_getting_an_image_on_the_screen/hello_world.bmp", SDL_GetError());
 		success = false;
@@ -113,7 +119,7 @@ bool loadMedia()
 	{
 		printf("Unable to load image %s! SDL Error: %s\n", "02_getting_an_image_on_the_screen/hello_world.bmp", SDL_GetError());
 		success = false;
-	}
+	}*/
 
 	return success;
 }
@@ -121,7 +127,7 @@ bool loadMedia()
 void close()
 {
 	//Deallocate surface
-	SDL_FreeSurface(WhiteCase);
+	/*SDL_FreeSurface(WhiteCase);
 	WhiteCase = NULL;
 	SDL_FreeSurface(WhitePawn);
 	WhitePawn = NULL;
@@ -149,7 +155,7 @@ void close()
 	SDL_FreeSurface(BlackKnight);
 	BlackKnight = NULL;
 	SDL_FreeSurface(BlackBishop);
-	BlackBishop = NULL;
+	BlackBishop = NULL;*/
 
 	//Destroy window
 	SDL_DestroyWindow(gWindow);
@@ -175,29 +181,96 @@ int main(int argc, char* args[])
 		}
 		else
 		{
-				for (int i = 0; i < 8; i++)
+			for (int i = 0; i < 8; i++)
+			{
+				Board.push_back(std::vector<Case>());
+				pieceBoard.push_back(std::vector<Piece*>());
+				for (int j = 0; j < 8; j++)
 				{
-					Board.push_back(std::vector<Case>());
-					for (int j = 0; j < 8; j++)
-					{
-						Board[i].push_back(Case(i, j));
-						
-
-					}
+					Board[i].push_back(Case(i, j));
+					if (j == 0 && i == 0)
+						pieceBoard[i].push_back(new Rook(i, j,true));
+					else if (j == 0 && i == 1)
+						pieceBoard[i].push_back(new Knight(i, j, true));
+					else if (j == 0 && i == 2)
+						pieceBoard[i].push_back(new Bishop(i, j, true));
+					else if (j == 0 && i == 3)
+						pieceBoard[i].push_back(new Queen(i, j, true));
+					else if (j == 0 && i == 4)
+						pieceBoard[i].push_back(new King(i, j, true));
+					else if (j == 0 && i == 5)
+						pieceBoard[i].push_back(new Bishop(i, j, true));
+					else if (j == 0 && i == 6)
+						pieceBoard[i].push_back(new Knight(i, j, true));
+					else if (j == 0 && i == 7)
+						pieceBoard[i].push_back(new Rook(i, j, true));
+					else if (j == 1)
+						pieceBoard[i].push_back(new WhitePawn(i, j, true));
+					else if (j == 7 && i == 0)
+						pieceBoard[i].push_back(new Rook(i, j, false));
+					else if (j == 7 && i == 1)
+						pieceBoard[i].push_back(new Knight(i, j, false));
+					else if (j == 7 && i == 2)
+						pieceBoard[i].push_back(new Bishop(i, j, false));
+					else if (j == 7 && i == 3)
+						pieceBoard[i].push_back(new Queen(i, j, false));
+					else if (j == 7 && i == 4)
+						pieceBoard[i].push_back(new King(i, j, false));
+					else if (j == 7 && i == 5)
+						pieceBoard[i].push_back(new Bishop(i, j, false));
+					else if (j == 7 && i == 6)
+						pieceBoard[i].push_back(new Knight(i, j, false));
+					else if (j == 7 && i == 7)
+						pieceBoard[i].push_back(new Rook(i, j, false));
+					else
+						pieceBoard[i].push_back(new WhitePawn(i, j, false));
 				}
+			}
+			SDL_Event e;
 			while (true)
 			{
-			//Update the surface
-			SDL_UpdateWindowSurface(gWindow);
+				//Update the surface
+				SDL_UpdateWindowSurface(gWindow);
 				for (int i = 0; i < 8; i++)
 				{
 					for (int j = 0; j < 8; j++)
 					{
-						Board[i][j].Case::Render(gScreenSurface);
-						if (i == 0 || i == 1 || i == 6 || i == 7)
+						Board[i][j].Render(gScreenSurface);
+						if (j == 0 || j == 1 || j == 6 || j == 7)
 						{
-							pieceBoard[i][j].Render(gScreenSurface);
+							pieceBoard[i][j]->Render(gScreenSurface);
 						}
+					}
+				}
+
+				//Handle events on queue
+				while (SDL_PollEvent(&e) != 0)
+				{
+					if (e.type == SDL_MOUSEBUTTONDOWN)
+					{
+						int x, y;
+						SDL_GetMouseState(&y, &x);
+						
+						int i = x / 125;
+						int j = y / 125;
+						SDL_UpdateWindowSurface(gWindow);
+						std::cout << i << " " << j << std::endl;
+					}
+
+					if (e.type == SDL_MOUSEMOTION)
+					{
+						int x, y;
+						SDL_GetMouseState(&y, &x);
+						SDL_UpdateWindowSurface(gWindow);
+						//std::cout << x << " " << y << std::endl;
+					}
+
+					if (e.type == SDL_MOUSEBUTTONUP)
+					{
+						int x, y;
+						SDL_GetMouseState(&y, &x);
+						SDL_UpdateWindowSurface(gWindow);
+						//std::cout << x << " | " << y << std::endl;
 					}
 				}
 			}
