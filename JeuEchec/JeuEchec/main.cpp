@@ -36,25 +36,14 @@ SDL_Window* gWindow = NULL;
 //The surface contained by the window
 SDL_Surface* gScreenSurface = NULL;
 
-//The image we will load and show on the screen
-/*SDL_Surface* WhiteCase = NULL;
-SDL_Surface* WhitePawn = NULL;
-SDL_Surface* WhiteKing = NULL;
-SDL_Surface* WhiteQueen = NULL;
-SDL_Surface* WhiteRook = NULL;
-SDL_Surface* WhiteKnight = NULL;
-SDL_Surface* WhiteBishop = NULL;
-SDL_Surface* BlackCase = NULL;
-SDL_Surface* BlackPawn = NULL;
-SDL_Surface* BlackKing = NULL;
-SDL_Surface* BlackQueen = NULL;
-SDL_Surface* BlackKnight = NULL;
-SDL_Surface* BlackRook = NULL;
-SDL_Surface* BlackBishop = NULL;*/
-
 //Vecteurs pour creer le board
 std::vector<std::vector<Case>> Board = std::vector<std::vector<Case>>();
 std::vector<std::vector<Piece*>> pieceBoard = std::vector<std::vector<Piece*>>();
+
+Piece* selectedPiece = nullptr;
+
+int CaseX;
+int CaseY;
 
 bool init()
 {
@@ -90,36 +79,6 @@ bool loadMedia()
 {
 	//Loading success flag
 	bool success = true;
-
-	//Load splash image
-	/*WhiteCase = IMG_Load("Images/WhiteCase.png");
-	WhitePawn = IMG_Load("Images/WhitePawn.png");
-	WhiteKing = IMG_Load("Images/WhiteKing.png");
-	WhiteQueen = IMG_Load("Images/WhiteQueen.png");
-	WhiteRook = IMG_Load("Images/WhiteRook.png");
-	WhiteKnight = IMG_Load("Images/WhiteKnight.png");
-	WhiteBishop = IMG_Load("Images/WhiteBishop.png");
-
-
-	BlackCase = IMG_Load("Images/BlackCase.png");
-	BlackPawn = IMG_Load("Images/BlackPawn.png");
-	BlackKing = IMG_Load("Images/BlackKing.png");
-	BlackQueen = IMG_Load("Images/BlackQueen.png");
-	BlackRook = IMG_Load("Images/BlackRook.png");
-	BlackKnight = IMG_Load("Images/BlackKnight.png");
-	BlackBishop = IMG_Load("Images/BlackBishop.png");*/
-
-	/*if (WhiteCase == NULL)
-	{
-		printf("Unable to load image %s! SDL Error: %s\n", "02_getting_an_image_on_the_screen/hello_world.bmp", SDL_GetError());
-		success = false;
-	}
-
-	if (BlackCase == NULL)
-	{
-		printf("Unable to load image %s! SDL Error: %s\n", "02_getting_an_image_on_the_screen/hello_world.bmp", SDL_GetError());
-		success = false;
-	}*/
 
 	return success;
 }
@@ -236,6 +195,13 @@ int main(int argc, char* args[])
 					for (int j = 0; j < 8; j++)
 					{
 						Board[i][j].Render(gScreenSurface);
+					}
+				}
+
+				for (int i = 0; i < 8; i++)
+				{
+					for (int j = 0; j < 8; j++)
+					{
 						if (j == 0 || j == 1 || j == 6 || j == 7)
 						{
 							pieceBoard[i][j]->Render(gScreenSurface);
@@ -246,31 +212,55 @@ int main(int argc, char* args[])
 				//Handle events on queue
 				while (SDL_PollEvent(&e) != 0)
 				{
+					bool selected = false;
 					if (e.type == SDL_MOUSEBUTTONDOWN)
 					{
 						int x, y;
 						SDL_GetMouseState(&y, &x);
+
+						CaseY = y / 125;
+						CaseX = x / 125;
+
+						if (pieceBoard[CaseY][CaseX] != nullptr)
+						{
+							selectedPiece = pieceBoard[CaseY][CaseX];
+						}
 						
-						int i = x / 125;
-						int j = y / 125;
-						SDL_UpdateWindowSurface(gWindow);
-						std::cout << i << " " << j << std::endl;
+
 					}
 
 					if (e.type == SDL_MOUSEMOTION)
 					{
 						int x, y;
 						SDL_GetMouseState(&y, &x);
-						SDL_UpdateWindowSurface(gWindow);
-						//std::cout << x << " " << y << std::endl;
+
+						if (selectedPiece != nullptr)
+						{
+							selectedPiece->rect.x = y;
+							selectedPiece->rect.y = x;
+						}
+
 					}
 
 					if (e.type == SDL_MOUSEBUTTONUP)
 					{
 						int x, y;
 						SDL_GetMouseState(&y, &x);
-						SDL_UpdateWindowSurface(gWindow);
-						//std::cout << x << " | " << y << std::endl;
+
+						int i = x / 125;
+						int j = y / 125;
+						int mi = ((y / 125) * 125);
+						int mj = ((x / 125) * 125);
+
+						if (selectedPiece != nullptr)
+						{
+							selectedPiece->rect.x = mi;
+							selectedPiece->rect.y = mj;
+							pieceBoard[i][j] = selectedPiece;
+
+							pieceBoard[CaseY][CaseX] = NULL;
+							selectedPiece = nullptr;
+						}
 					}
 				}
 			}

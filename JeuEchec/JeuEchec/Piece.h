@@ -13,6 +13,6 @@ public:
 	SDL_Surface* pieceTexture;
 
 	virtual void Render(SDL_Surface* gScreenSurface);
-	virtual void Move();
+	virtual void Move(SDL_Event e);
 };
 

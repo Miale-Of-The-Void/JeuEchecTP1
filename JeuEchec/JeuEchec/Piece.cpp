@@ -16,9 +16,8 @@ void Piece::Render(SDL_Surface* gScreenSurface)
 	SDL_BlitSurface(pieceTexture, NULL, gScreenSurface, &rect);
 }
 
-void Piece::Move()
+void Piece::Move(SDL_Event e)
 {
-	SDL_Event e;
 	while (SDL_PollEvent(&e) != 0)
 	{
 		bool selected = false;

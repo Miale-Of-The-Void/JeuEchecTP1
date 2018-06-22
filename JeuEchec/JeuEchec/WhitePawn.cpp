@@ -18,9 +18,8 @@ void WhitePawn::Render(SDL_Surface* gScreenSurface)
 	SDL_BlitSurface(pieceTexture, NULL, gScreenSurface, &rect);
 }
 
-void WhitePawn::Move()
+void WhitePawn::Move(SDL_Event e)
 {
-	SDL_Event e;
 	while (SDL_PollEvent(&e) != 0)
 	{
 		bool selected = false;
@@ -32,10 +31,11 @@ void WhitePawn::Move()
 			int mi = x / 125;
 			int mj = y / 125;
 
-			if (mi == rect.x && mj == rect.y)
+			if (mi == (rect.x / 125) && mj == (rect.y / 125))
 			{
 				selected = true;
 			}
+
 		}
 
 		if (e.type == SDL_MOUSEMOTION)

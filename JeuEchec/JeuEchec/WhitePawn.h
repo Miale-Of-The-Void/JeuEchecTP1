@@ -7,7 +7,7 @@ public:
 	WhitePawn(int i, int j, bool black);
 	~WhitePawn();
 
-	void Render(SDL_Surface* gScreenSurface);
-	void Move();
+	virtual void Render(SDL_Surface* gScreenSurface);
+	virtual void Move(SDL_Event e);
 };
 
